@@ -95,22 +95,40 @@ async function seed() {
     adminRole.permissions = allPerms;
     await roleRepo.save(adminRole);
     console.log('📌 Seeding regions...');
-    const regions = [
+    const provinceData = [
         { name: '北京市', level: 1 },
         { name: '上海市', level: 1 },
         { name: '广东省', level: 1 },
-        { name: '深圳市', level: 2 },
-        { name: '广州市', level: 2 },
         { name: '江苏省', level: 1 },
-        { name: '南京市', level: 2 },
-        { name: '苏州市', level: 2 },
         { name: '浙江省', level: 1 },
-        { name: '杭州市', level: 2 },
     ];
-    for (const rg of regions) {
+    const cityData = [
+        { name: '深圳市', level: 2, parentName: '广东省' },
+        { name: '广州市', level: 2, parentName: '广东省' },
+        { name: '南京市', level: 2, parentName: '江苏省' },
+        { name: '苏州市', level: 2, parentName: '江苏省' },
+        { name: '杭州市', level: 2, parentName: '浙江省' },
+    ];
+    for (const rg of provinceData) {
         const existing = await regionRepo.findOne({ where: { name: rg.name } });
         if (!existing) {
             await regionRepo.save(regionRepo.create(rg));
+        }
+    }
+    const allProvinces = await regionRepo.find({ where: { level: 1 } });
+    for (const city of cityData) {
+        const existing = await regionRepo.findOne({ where: { name: city.name } });
+        const parent = allProvinces.find((p) => p.name === city.parentName);
+        if (!existing) {
+            await regionRepo.save(regionRepo.create({
+                name: city.name,
+                level: city.level,
+                parentId: parent?.id || null,
+            }));
+        }
+        else if (parent && existing.parentId !== parent.id) {
+            existing.parentId = parent.id;
+            await regionRepo.save(existing);
         }
     }
     console.log('📌 Seeding users...');
