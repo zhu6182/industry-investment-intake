@@ -187,7 +187,7 @@ const rules = {
 function fillAccount(type: 'admin') {
   if (type === 'admin') {
     formState.phone = '13800000000';
-    formState.password = '123456';
+    formState.password = 'admin123';
     message.success('已填充管理员账号，点击登录');
   }
 }
