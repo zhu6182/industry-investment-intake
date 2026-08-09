@@ -17,7 +17,7 @@ export class Visit {
   @Column()
   intakeId: number;
 
-  @Column({ type: 'timestamp' })
+  @Column()
   visitDate: Date;
 
   @Column()
