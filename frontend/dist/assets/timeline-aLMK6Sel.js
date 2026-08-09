@@ -1,0 +1,1 @@
+import{r as e}from"./_plugin-vue_export-helper-q4AbwU3k.js";function t(t){return e({url:`/api/timeline/${t}`,method:`get`})}function n(){return e({url:`/api/stats/dashboard`,method:`get`})}function r(){return e({url:`/api/stats/team`,method:`get`})}export{r as n,t as r,n as t};

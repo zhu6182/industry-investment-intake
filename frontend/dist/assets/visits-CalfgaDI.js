@@ -1,0 +1,1 @@
+import{r as e}from"./_plugin-vue_export-helper-q4AbwU3k.js";function t(t){return e({url:`/api/visits`,method:`post`,data:t})}function n(t){return e({url:`/api/visits`,method:`get`,params:t})}function r(t){return e({url:`/api/visits/my`,method:`get`,params:t})}function i(t){return e({url:`/api/visits`,method:`get`,params:{intakeId:t}})}export{n as i,i as n,r,t};

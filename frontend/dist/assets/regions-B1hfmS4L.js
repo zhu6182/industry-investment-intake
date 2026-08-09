@@ -1,0 +1,1 @@
+import{r as e}from"./_plugin-vue_export-helper-q4AbwU3k.js";function t(){return e({url:`/api/regions/tree`,method:`get`})}function n(t){return e({url:`/api/regions`,method:`post`,data:t})}function r(t,n){return e({url:`/api/regions/${t}`,method:`patch`,data:n})}function i(t){return e({url:`/api/regions/${t}`,method:`delete`})}export{r as i,i as n,t as r,n as t};

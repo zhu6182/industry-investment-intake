@@ -1,0 +1,1 @@
+import{r as e}from"./_plugin-vue_export-helper-q4AbwU3k.js";function t(){return e({url:`/api/roles`,method:`get`})}function n(){return e({url:`/api/roles/permissions/list`,method:`get`})}function r(t,n){return e({url:`/api/roles/${t}/permissions`,method:`patch`,data:{permissionIds:n}})}export{t as n,r,n as t};
