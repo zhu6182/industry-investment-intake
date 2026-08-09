@@ -47,7 +47,7 @@ export class Intake {
   applicationRegionId: number;
 
   @Column({
-    type: 'real',
+    type: 'float',
     nullable: true,
   })
   area: number;

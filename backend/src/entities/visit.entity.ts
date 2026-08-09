@@ -17,7 +17,7 @@ export class Visit {
   @Column()
   intakeId: number;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   visitDate: Date;
 
   @Column()
@@ -33,7 +33,7 @@ export class Visit {
   applicationRegionId: number;
 
   @Column({
-    type: 'real',
+    type: 'float',
     nullable: true,
   })
   area: number;

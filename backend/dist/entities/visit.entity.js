@@ -36,7 +36,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Visit.prototype, "intakeId", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'datetime' }),
+    (0, typeorm_1.Column)({ type: 'timestamp' }),
     __metadata("design:type", Date)
 ], Visit.prototype, "visitDate", void 0);
 __decorate([
@@ -57,7 +57,7 @@ __decorate([
 ], Visit.prototype, "applicationRegionId", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        type: 'real',
+        type: 'float',
         nullable: true,
     }),
     __metadata("design:type", Number)

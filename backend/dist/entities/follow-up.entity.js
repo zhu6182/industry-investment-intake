@@ -42,7 +42,7 @@ __decorate([
     __metadata("design:type", String)
 ], FollowUp.prototype, "content", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'datetime' }),
+    (0, typeorm_1.Column)({ type: 'timestamp' }),
     __metadata("design:type", Date)
 ], FollowUp.prototype, "followDate", void 0);
 __decorate([

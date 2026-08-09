@@ -67,7 +67,7 @@ __decorate([
 ], Intake.prototype, "applicationRegionId", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        type: 'real',
+        type: 'float',
         nullable: true,
     }),
     __metadata("design:type", Number)

@@ -30,7 +30,7 @@ export class FollowUp {
   @Column({ type: 'text' })
   content: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   followDate: Date;
 
   @Column({ type: 'simple-json', nullable: true })
