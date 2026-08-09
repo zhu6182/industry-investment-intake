@@ -76,6 +76,12 @@ backend/coverage/
 backend/tsconfig.build.tsbuildinfo
 backend/dist/tsconfig.build.tsbuildinfo
 
+# Allow prebuilt dist for Render free tier (30s build limit)
+!backend/dist/
+!backend/dist/**/*
+!frontend/dist/
+!frontend/dist/**/*
+
 # Test artifacts (PNGs, TXTs, PDFs from manual QA)
 *.png
 *.txt
