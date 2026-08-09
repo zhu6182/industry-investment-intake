@@ -1,28 +1,29 @@
+FROM node:20-alpine AS deps
+WORKDIR /app
+ENV PUPPETEER_SKIP_DOWNLOAD=true \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    NPM_CONFIG_AUDIT=false \
+    NPM_CONFIG_FUND=false
+COPY backend/package*.json ./
+RUN npm ci --omit=dev --legacy-peer-deps --no-audit --no-fund 2>&1 | tail -5
+
 FROM node:20-alpine AS builder
 WORKDIR /app
-
-ENV PUPPETEER_SKIP_DOWNLOAD=true
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV NPM_CONFIG_AUDIT=false
-ENV NPM_CONFIG_FUND=false
-ENV NODE_OPTIONS="--max-old-space-size=2048"
-
-COPY backend/package.json ./package.json
-
-RUN npm install --legacy-peer-deps --omit=dev --no-audit --no-fund --prefer-offline
-
+ENV PUPPETEER_SKIP_DOWNLOAD=true \
+    NPM_CONFIG_AUDIT=false \
+    NPM_CONFIG_FUND=false
+COPY backend/package*.json ./
+RUN npm ci --legacy-peer-deps --no-audit --no-fund 2>&1 | tail -5
 COPY backend/ ./
-RUN npm install --legacy-peer-deps --no-audit --no-fund --prefer-offline
-
-RUN npx nest build && rm -rf src tsconfig.json tsconfig.build.json tsconfig.build.tsbuildinfo test
+RUN npx nest build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=10000
-ENV NODE_OPTIONS="--max-old-space-size=512"
+ENV NODE_OPTIONS="--max-old-space-size=400"
 
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./package.json
 
