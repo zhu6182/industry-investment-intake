@@ -1,0 +1,159 @@
+/* ===========================================
+   全局响应式适配样式
+   - PC: 100vh 全屏布局
+   - 移动端: 100dvh 适配（处理浏览器地址栏）
+   - 小屏: 调整间距 / 字体
+   =========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* PC 业务页通用 - 内部滚动 */
+.pc-page,
+.intake-list,
+.intake-form,
+.intake-detail,
+.follow-up-list,
+.visit-list,
+.dashboard-page,
+.review-list,
+.review-detail,
+.referral-list,
+.admin-page {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  background: #f5f5f5;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1280px) {
+  .pc-page,
+  .intake-list,
+  .intake-form,
+  .intake-detail,
+  .follow-up-list,
+  .visit-list,
+  .dashboard-page,
+  .review-list,
+  .review-detail,
+  .referral-list,
+  .admin-page {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .pc-page,
+  .intake-list,
+  .intake-form,
+  .intake-detail,
+  .follow-up-list,
+  .visit-list,
+  .dashboard-page,
+  .review-list,
+  .review-detail,
+  .referral-list,
+  .admin-page {
+    padding: 10px;
+  }
+}
+
+/* 移动端 */
+.mobile-page {
+  width: 100%;
+  min-height: 100dvh;
+  background: #f7f8fa;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (max-width: 480px) {
+  .mobile-page {
+    font-size: 14px;
+  }
+}
+
+/* 卡片响应式 */
+.responsive-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .responsive-card {
+    padding: 12px;
+    border-radius: 4px;
+  }
+}
+
+/* 表格响应式 - 横向滚动 */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 表单响应式 */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* 防止 overflow 出现横向滚动条 */
+.ant-layout-content {
+  overflow-x: hidden !important;
+}
+
+/* 修复大屏在小窗口的内容溢出 */
+@media (max-height: 700px) {
+  .pc-page,
+  .intake-list,
+  .intake-form,
+  .intake-detail,
+  .follow-up-list,
+  .visit-list,
+  .dashboard-page,
+  .review-list,
+  .review-detail,
+  .referral-list,
+  .admin-page {
+    padding: 10px;
+  }
+}

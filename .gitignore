@@ -1,0 +1,91 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+*/dist/
+backend/dist/
+frontend/dist/
+
+# Local DB
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+.env.local
+.env.*.local
+backend/.env
+backend/.env.local
+backend/.env.production
+!**/.env.example
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+backend/dev.log
+backend/dev-err.log
+frontend/dev.log
+frontend/dev-err.log
+frontend/preview.log
+frontend/preview-err.log
+
+# Uploads (large binary files - managed by Render Persistent Disk in production)
+backend/uploads/
+backend/uploads
+!**/uploads/.gitkeep
+
+# Runtime
+.cache/
+.tmp/
+temp/
+backend/dist/seed.js.map
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Test
+coverage/
+.nyc_output/
+backend/coverage/
+
+# Render
+.render-builds/
+
+# TypeScript build info
+*.tsbuildinfo
+backend/tsconfig.build.tsbuildinfo
+backend/dist/tsconfig.build.tsbuildinfo
+
+# Test artifacts (PNGs, TXTs, PDFs from manual QA)
+*.png
+*.txt
+*.pdf
+!frontend/src/assets/**/*.png
+!frontend/src/assets/**/*.svg
+!frontend/public/**/*.png
+!frontend/public/**/*.svg
+!frontend/public/**/*.ico
+!docs/**/*.md
+!backend/README.md
+!frontend/README.md
+!README.md
