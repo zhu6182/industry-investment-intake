@@ -1,8 +1,8 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
+COPY backend/package*.json ./
 RUN npm install --legacy-peer-deps
-COPY . .
+COPY backend/ ./
 RUN npm run build && npm prune --production
 
 FROM node:20-alpine AS runner
