@@ -23,6 +23,11 @@ const BI_ROLES = [
 export class BiController {
   constructor(private readonly biService: BiService) {}
 
+  @Get('all')
+  async getAll(@Req() req: { user: any }) {
+    return this.biService.getAllBiData(req.user);
+  }
+
   @Get('map')
   async getMap(@Req() req: { user: any }) {
     return this.biService.getMapData(req.user);

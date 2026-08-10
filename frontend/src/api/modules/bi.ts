@@ -63,6 +63,10 @@ export interface Summary {
   weekNewIntakes: number;
 }
 
+export function getAllBiData() {
+  return request<any>({ url: '/api/bi/all', method: 'get' });
+}
+
 export function getMapData() {
   return request<MapData>({ url: '/api/bi/map', method: 'get' });
 }
