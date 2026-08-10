@@ -40,6 +40,7 @@ let McpConfigService = McpConfigService_1 = class McpConfigService {
         this.logger.log(`[MCP] 启动加载: enabled=${cfg.enabled}, url=${cfg.url}, key=${cfg.headers['X-Agent-Plan-Key'] ? '***' + cfg.headers['X-Agent-Plan-Key'].slice(-8) : '(empty)'}`);
     }
     async getConfig() {
+        // 优先读环境变量（部署时直接配，不用走数据库）
         const envEnabled = process.env.VOLC_MCP_ENABLED;
         const envUrl = process.env.VOLC_MCP_URL;
         const envHeaders = process.env.VOLC_MCP_HEADERS;
@@ -47,11 +48,7 @@ let McpConfigService = McpConfigService_1 = class McpConfigService {
         if (envEnabled === 'true' && envUrl) {
             let headers = {};
             if (envHeaders) {
-                try {
-                    headers = JSON.parse(envHeaders);
-                }
-                catch {
-                }
+                try { headers = JSON.parse(envHeaders); } catch { /* ignore */ }
             }
             return {
                 enabled: true,
