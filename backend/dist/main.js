@@ -30,4 +30,4 @@ async function bootstrap() {
     logger.log(`🗄  DATABASE: ${process.env.DATABASE_URL ? 'PostgreSQL (via DATABASE_URL)' : 'SQLite (./data.db)'}`);
 }
 bootstrap();
-//# sourceMappingURL=main.js.map 
+//# sourceMappingURL=main.js.map
