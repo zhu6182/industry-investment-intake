@@ -12,7 +12,30 @@
       html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
       #app { width: 100vw; height: 100vh; }
     </style>
-    <script type="module" crossorigin src="/assets/index-DSFt7jkL.js"></script>
+    <script>
+      // 设备检测：手机自动跳 /mobile/home，PC 自动跳 /pc/dashboard
+      (function() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|phone|harmonyos|hongmeng/.test(ua)
+          || (navigator.maxTouchPoints > 0 && window.innerWidth < 768);
+        var path = window.location.pathname;
+        var hash = window.location.hash;
+        var search = window.location.search;
+
+        // 已在手机页或 PC 页的不跳（避免死循环）
+        if (path.startsWith('/mobile/') || path.startsWith('/pc/') || path === '/index.html' || path.startsWith('/assets/') || path.startsWith('/map/')) {
+          return;
+        }
+
+        var target = isMobile ? '/mobile/home' : '/pc/dashboard';
+        // 保留登录后 redirect 参数
+        if (search.indexOf('redirect=') > -1) {
+          target += search;
+        }
+        window.location.replace(target + hash);
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-DcUVfQJO.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/_plugin-vue_export-helper-q4AbwU3k.js">
     <link rel="modulepreload" crossorigin href="/assets/runtime-dom.esm-bundler-DQNwBxc9.js">
     <link rel="modulepreload" crossorigin href="/assets/config-provider-B4v0_cck.js">
