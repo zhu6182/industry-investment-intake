@@ -110,7 +110,7 @@ let McpConfigService = McpConfigService_1 = class McpConfigService {
             const res = await fetch(cfg.url, {
                 method: 'GET',
                 headers: {
-                    Accept: 'application/json',
+                    Accept: 'application/json, text/event-stream',
                     ...cfg.headers,
                 },
                 signal: controller.signal,
