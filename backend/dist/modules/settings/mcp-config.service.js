@@ -40,6 +40,27 @@ let McpConfigService = McpConfigService_1 = class McpConfigService {
         this.logger.log(`[MCP] 启动加载: enabled=${cfg.enabled}, url=${cfg.url}, key=${cfg.headers['X-Agent-Plan-Key'] ? '***' + cfg.headers['X-Agent-Plan-Key'].slice(-8) : '(empty)'}`);
     }
     async getConfig() {
+        const envEnabled = process.env.VOLC_MCP_ENABLED;
+        const envUrl = process.env.VOLC_MCP_URL;
+        const envHeaders = process.env.VOLC_MCP_HEADERS;
+        const envTimeout = process.env.VOLC_MCP_TIMEOUT;
+        if (envEnabled === 'true' && envUrl) {
+            let headers = {};
+            if (envHeaders) {
+                try {
+                    headers = JSON.parse(envHeaders);
+                }
+                catch {
+                }
+            }
+            return {
+                enabled: true,
+                url: envUrl,
+                headers,
+                timeoutMs: envTimeout ? Number(envTimeout) : 30000,
+                note: '环境变量配置',
+            };
+        }
         const raw = await this.getByKey(MCP_KEY);
         if (!raw) {
             return { ...DEFAULT_MCP_CONFIG };
@@ -110,7 +131,7 @@ let McpConfigService = McpConfigService_1 = class McpConfigService {
             const res = await fetch(cfg.url, {
                 method: 'GET',
                 headers: {
-                    Accept: 'application/json, text/event-stream',
+                    Accept: 'application/json',
                     ...cfg.headers,
                 },
                 signal: controller.signal,

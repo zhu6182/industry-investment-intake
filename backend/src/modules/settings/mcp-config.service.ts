@@ -55,6 +55,30 @@ export class McpConfigService implements OnModuleInit {
   }
 
   async getConfig(): Promise<McpConfig> {
+    // 优先读环境变量（部署时直接配，不用走数据库）
+    const envEnabled = process.env.VOLC_MCP_ENABLED;
+    const envUrl = process.env.VOLC_MCP_URL;
+    const envHeaders = process.env.VOLC_MCP_HEADERS;
+    const envTimeout = process.env.VOLC_MCP_TIMEOUT;
+
+    if (envEnabled === 'true' && envUrl) {
+      let headers: Record<string, string> = {};
+      if (envHeaders) {
+        try {
+          headers = JSON.parse(envHeaders);
+        } catch {
+          // ignore
+        }
+      }
+      return {
+        enabled: true,
+        url: envUrl,
+        headers,
+        timeoutMs: envTimeout ? Number(envTimeout) : 30000,
+        note: '环境变量配置',
+      };
+    }
+
     const raw = await this.getByKey(MCP_KEY);
     if (!raw) {
       return { ...DEFAULT_MCP_CONFIG };
@@ -140,7 +164,7 @@ export class McpConfigService implements OnModuleInit {
       const res = await fetch(cfg.url, {
         method: 'GET',
         headers: {
-          Accept: 'application/json, text/event-stream',
+          Accept: 'application/json',
           ...cfg.headers,
         },
         signal: controller.signal,
