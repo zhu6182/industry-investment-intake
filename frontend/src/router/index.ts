@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import { useUserStore } from '@/stores/user';
+import { isMobile, toMobilePath, toPcPath } from '@/utils/device';
 
 // 角色常量
 const R_ADMIN = 'admin';
@@ -22,7 +23,10 @@ const ADMIN_SETTINGS = [R_ADMIN, R_MIDDLEWARE];
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/pc/dashboard',
+    redirect: () => {
+      if (isMobile()) return '/mobile/home';
+      return '/pc/dashboard';
+    },
   },
   {
     path: '/pc/login',
@@ -220,7 +224,10 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/login',
-    redirect: '/pc/login',
+    redirect: () => {
+      if (isMobile()) return '/mobile/login';
+      return '/pc/login';
+    },
   },
 ];
 
@@ -236,6 +243,24 @@ router.beforeEach((to, _from, next) => {
   const isPublic = !!to.meta.public;
   const requiresAuth = !!to.meta.requiresAuth;
   const requiredRoles = to.meta.roles as string[] | undefined;
+  const platform = to.meta.platform as string;
+  const isMob = isMobile();
+
+  // 设备不匹配时自动跳转（只针对有明确 platform 标记的页面）
+  if (platform && platform !== 'both') {
+    if (isMob && platform === 'pc') {
+      // 手机访问 PC 页 → 跳手机版
+      const mobilePath = to.fullPath.replace('/pc/', '/mobile/');
+      next(mobilePath);
+      return;
+    }
+    if (!isMob && platform === 'mobile') {
+      // PC 访问手机页 → 跳 PC 版
+      const pcPath = to.fullPath.replace('/mobile/', '/pc/');
+      next(pcPath);
+      return;
+    }
+  }
 
   if (isPublic) {
     if (userStore.isLoggedIn && (to.name === 'PCLogin' || to.name === 'MobileLogin')) {
