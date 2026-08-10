@@ -95,6 +95,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '数据大屏', platform: 'pc', requiresAuth: true, roles: BI_ROLES },
       },
       {
+        path: 'bi2',
+        name: 'PCBiV2',
+        component: () => import('@/views/pc/bi/BigScreenV2.vue'),
+        meta: { title: '数据大屏 V2', platform: 'pc', requiresAuth: true, roles: BI_ROLES },
+      },
+      {
         path: 'referrals',
         name: 'PCReferrals',
         component: () => import('@/views/pc/referrals/MyReferrals.vue'),
