@@ -29,6 +29,9 @@ let BiController = class BiController {
     constructor(biService) {
         this.biService = biService;
     }
+    async getAll(req) {
+        return this.biService.getAllBiData(req.user);
+    }
     async getMap(req) {
         return this.biService.getMapData(req.user);
     }
@@ -49,6 +52,13 @@ let BiController = class BiController {
     }
 };
 exports.BiController = BiController;
+__decorate([
+    (0, common_1.Get)('all'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BiController.prototype, "getAll", null);
 __decorate([
     (0, common_1.Get)('map'),
     __param(0, (0, common_1.Req)()),

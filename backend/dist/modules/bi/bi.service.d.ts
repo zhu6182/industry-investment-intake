@@ -12,6 +12,47 @@ export declare class BiService {
     private getUserRoleCodes;
     private applyDataScopeFilter;
     private applyVisitScopeFilter;
+    getAllBiData(currentUser: CurrentUser): Promise<{
+        provinces: {
+            name: string;
+            code: string;
+            enterpriseCount: number;
+            totalArea: number;
+            landedCount: number;
+        }[];
+        totals: {
+            totalEnterprises: number;
+            totalArea: number;
+            totalLanded: number;
+            conversionRate: number;
+        };
+        recent30days: {
+            created: number;
+            approved: number;
+            visited: number;
+        };
+        statusDistribution: {
+            name: any;
+            value: number;
+        }[];
+        trend: {
+            dates: string[];
+            created: number[];
+            landed: number[];
+        };
+        industryDistribution: {
+            name: any;
+            value: number;
+        }[];
+        summary: {
+            totalEnterprises: number;
+            totalArea: number;
+            landedCount: number;
+            conversionRate: number;
+            pendingCount: number;
+            weekNewIntakes: number;
+        };
+    }>;
     getMapData(currentUser: CurrentUser): Promise<{
         provinces: {
             name: string;
@@ -43,7 +84,7 @@ export declare class BiService {
         provinceName: string;
     }>;
     getStatusDistribution(currentUser: CurrentUser): Promise<{
-        name: string;
+        name: any;
         value: number;
     }[]>;
     getTrendData(currentUser: CurrentUser, days?: number): Promise<{
@@ -52,7 +93,7 @@ export declare class BiService {
         landed: number[];
     }>;
     getIndustryDistribution(currentUser: CurrentUser): Promise<{
-        name: string;
+        name: any;
         value: number;
     }[]>;
     getSummary(currentUser: CurrentUser): Promise<{
