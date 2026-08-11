@@ -13,26 +13,51 @@
       #app { width: 100vw; height: 100vh; }
     </style>
     <script>
-      // 设备检测：手机自动跳 /mobile/home，PC 自动跳 /pc/dashboard
+      // 设备检测 + 强制跳转：手机访问任何 PC 页都跳手机版
       (function() {
         var ua = navigator.userAgent.toLowerCase();
-        var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|phone|harmonyos|hongmeng/.test(ua)
-          || (navigator.maxTouchPoints > 0 && window.innerWidth < 768);
+        var isMobile = /android|webos|iphone|ipod|blackberry|iemobile|opera mini|mobile|phone|harmonyos|hongmeng|microMessenger|wechat|qq\//.test(ua)
+          || (navigator.maxTouchPoints > 0 && Math.min(window.innerWidth, window.innerHeight) < 768);
+
+        // iPad 也识别为平板，但屏幕大不强制跳
+        var isTablet = /ipad|tablet/.test(ua);
+
+        if (!isMobile || isTablet) return;
+
         var path = window.location.pathname;
-        var hash = window.location.hash;
-        var search = window.location.search;
 
-        // 已在手机页或 PC 页的不跳（避免死循环）
-        if (path.startsWith('/mobile/') || path.startsWith('/pc/') || path === '/index.html' || path.startsWith('/assets/') || path.startsWith('/map/')) {
-          return;
+        // 已经在手机页 → 不跳
+        if (path.startsWith('/mobile/')) return;
+
+        // 静态资源 → 不跳
+        if (path.startsWith('/assets/') || path.startsWith('/map/') || path.endsWith('.svg') || path.endsWith('.png') || path.endsWith('.ico')) return;
+
+        // PC 页转手机页：/pc/dashboard → /mobile/home
+        // /pc/intakes → /mobile/intakes
+        // /pc/bi → /mobile/bi
+        var mobilePath = '/mobile/home';
+        if (path.startsWith('/pc/')) {
+          var rest = path.replace('/pc/', '');
+          // 工作台 → 首页
+          if (rest === 'dashboard' || rest === '') {
+            mobilePath = '/mobile/home';
+          } else if (rest === 'login') {
+            mobilePath = '/mobile/login';
+          } else if (rest === 'bi' || rest === 'bi2') {
+            mobilePath = '/mobile/bi';
+          } else if (rest.startsWith('intakes')) {
+            mobilePath = '/mobile/intakes';
+          } else if (rest.startsWith('follow-ups')) {
+            mobilePath = '/mobile/follow-ups';
+          } else if (rest.startsWith('visits')) {
+            mobilePath = '/mobile/visits';
+          } else if (rest.startsWith('referrals')) {
+            mobilePath = '/mobile/referrals';
+          }
+          // 其他没对应手机页的，统一跳首页
         }
 
-        var target = isMobile ? '/mobile/home' : '/pc/dashboard';
-        // 保留登录后 redirect 参数
-        if (search.indexOf('redirect=') > -1) {
-          target += search;
-        }
-        window.location.replace(target + hash);
+        window.location.replace(mobilePath + window.location.search + window.location.hash);
       })();
     </script>
     <script type="module" crossorigin src="/assets/index-DcUVfQJO.js"></script>
