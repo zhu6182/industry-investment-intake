@@ -11,6 +11,58 @@
     <style>
       html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
       #app { width: 100vw; height: 100vh; }
+
+      /* 手机端底部导航栏 */
+      .m-tabbar {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 56px;
+        padding-bottom: env(safe-area-inset-bottom);
+        background: #fff;
+        border-top: 1px solid #ebedf0;
+        z-index: 9999;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .m-tabbar.show { display: flex; }
+      .m-tab-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #646566;
+        font-size: 10px;
+        text-decoration: none;
+        gap: 2px;
+        padding: 4px 0;
+      }
+      .m-tab-item.active { color: #1989fa; }
+      .m-tab-item svg { width: 22px; height: 22px; fill: currentColor; }
+      .m-tab-center {
+        position: relative;
+        top: -16px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1989fa, #00c9ff);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(25,137,250,0.4);
+      }
+      .m-tab-center svg { width: 24px; height: 24px; fill: #fff; }
+      .m-tab-center .label {
+        position: absolute;
+        bottom: -16px;
+        font-size: 10px;
+        color: #646566;
+        white-space: nowrap;
+      }
     </style>
     <script>
       // 设备检测 + 强制跳转：手机访问任何 PC 页都跳手机版
@@ -78,5 +130,107 @@
   </head>
   <body>
     <div id="app"></div>
+
+    <!-- 手机端底部导航 -->
+    <nav id="mTabbar" class="m-tabbar">
+      <a class="m-tab-item" data-path="/mobile/home" href="/mobile/home">
+        <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v10h-4v-6h-4v6H6V11H3z"/></svg>
+        <span>首页</span>
+      </a>
+      <a class="m-tab-item" data-path="/mobile/intakes" href="/mobile/intakes">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+        <span>进件</span>
+      </a>
+      <a class="m-tab-item m-tab-center" data-path="/mobile/intakes/new" href="/mobile/intakes/new">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+        <span class="label">新建</span>
+      </a>
+      <a class="m-tab-item" data-path="/mobile/bi" href="/mobile/bi">
+        <svg viewBox="0 0 24 24"><path d="M3 13h2v8H3v-8zm4-5h2v13H7V8zm4 8h2v5h-2v-5zm4-11h2v16h-2V5zm4 7h2v9h-2v-9z"/></svg>
+        <span>数据</span>
+      </a>
+      <a class="m-tab-item" data-path="/mobile/profile" href="/mobile/referrals">
+        <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4.2 0-8 2.3-8 5v3h16v-3c0-2.7-3.8-5-8-5z"/></svg>
+        <span>我的</span>
+      </a>
+    </nav>
+
+    <script>
+      // 手机端底部导航控制
+      (function() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isMobile = /android|webos|iphone|ipod|blackberry|iemobile|opera mini|mobile|phone|harmonyos|hongmeng|microMessenger|wechat|qq\//.test(ua)
+          || (navigator.maxTouchPoints > 0 && Math.min(window.innerWidth, window.innerHeight) < 768);
+        var isTablet = /ipad|tablet/.test(ua);
+        if (!isMobile || isTablet) return;
+
+        var tabbar = document.getElementById('mTabbar');
+        if (!tabbar) return;
+
+        // 需要显示 tabbar 的页面
+        var showPaths = ['/mobile/home', '/mobile/intakes', '/mobile/bi', '/mobile/referrals', '/mobile/follow-ups', '/mobile/visits'];
+
+        function updateTabbar() {
+          var path = window.location.pathname;
+          // 登录页和详情页不显示
+          if (path.startsWith('/mobile/login')) {
+            tabbar.classList.remove('show');
+            return;
+          }
+          // 新建进件页不显示（有返回按钮）
+          if (path.startsWith('/mobile/intakes/') && path !== '/mobile/intakes' && !path.includes('/new')) {
+            tabbar.classList.add('show');
+          } else {
+            tabbar.classList.add('show');
+          }
+
+          // 高亮当前 tab
+          var items = tabbar.querySelectorAll('.m-tab-item');
+          items.forEach(function(item) {
+            var itemPath = item.getAttribute('data-path') || '';
+            // 首页精确匹配，其他前缀匹配
+            if (itemPath === '/mobile/home') {
+              item.classList.toggle('active', path === '/mobile/home' || path === '/mobile/');
+            } else if (itemPath === '/mobile/intakes') {
+              item.classList.toggle('active', path.startsWith('/mobile/intakes') && !path.includes('/new'));
+            } else if (itemPath === '/mobile/bi') {
+              item.classList.toggle('active', path.startsWith('/mobile/bi'));
+            } else if (itemPath === '/mobile/profile' || itemPath === '/mobile/referrals') {
+              item.classList.toggle('active', path.startsWith('/mobile/referrals'));
+            }
+          });
+
+          // 给页面底部留间距
+          var app = document.getElementById('app');
+          if (app && tabbar.classList.contains('show')) {
+            app.style.paddingBottom = '60px';
+            app.style.boxSizing = 'border-box';
+          } else if (app) {
+            app.style.paddingBottom = '0';
+          }
+        }
+
+        // 拦截 tab 点击
+        var items = tabbar.querySelectorAll('a');
+        items.forEach(function(a) {
+          a.addEventListener('click', function(e) {
+            e.preventDefault();
+            var href = a.getAttribute('href');
+            if (href && window.location.pathname !== href) {
+              window.location.href = href;
+            }
+          });
+        });
+
+        // 监听路由变化
+        window.addEventListener('popstate', updateTabbar);
+        window.addEventListener('hashchange', updateTabbar);
+
+        // 初始检查
+        setTimeout(updateTabbar, 500);
+        setTimeout(updateTabbar, 1500);
+        setTimeout(updateTabbar, 3000);
+      })();
+    </script>
   </body>
 </html>
